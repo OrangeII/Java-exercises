@@ -18,6 +18,14 @@ class Calcolatrice3{
 		return stack[size.n];
 	}
 
+	public static void print(int[] stack, WrapInt size){
+		System.out.println("size: " + size.n);
+		for (int i = size.n -1; i > 0; i--) {
+			System.out.println(stack[i]);
+		}
+		System.out.println("-----");
+	}
+
 	public static void main(String[] args){
 		int[] stack = new int[100];
 		WrapInt size = new WrapInt(0);
@@ -48,6 +56,9 @@ class Calcolatrice3{
 				int a = pop(stack, size);
 				int b = pop(stack, size);
 				push(b % a, stack, size);
+		  } else if (c == '#') {
+				//ES 3
+				print(stack, size);
 		  }
 			pc++;
 		}
