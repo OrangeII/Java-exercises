@@ -1,9 +1,12 @@
-public class Word{
+public class Word extends Token{
   public String lexeme = "";
-  public Word(int tag, String s) { super(tag); lexeme=s; }
-  public String toString() { return "<" + tag + ", " + lexeme + ">"; }
-  public static final Word
-    iftok = new Word(Tag.IF, "if"),
+  public Word(int tag, String s) {
+    super(tag); lexeme=s;
+  }
+  public String toString() {
+    return "<" + tag + ", " + lexeme + ">";
+  }
+  public static final Word iftok = new Word(Tag.IF, "if"),
     then = new Word(Tag.THEN, "then"),
     elsetok = new Word(Tag.ELSE, "else"),
     fortok = new Word(Tag.FOR, "for"),

@@ -3,7 +3,7 @@ import java.io.*;
 
 public class Lexer{
 
-  //Lexer come soluzione all'esercizio 2.3
+  //Lexer come soluzione all'esercizio 2.1
   //per compilare rinominare il file "Lexer.java"
 
   public static int line = 1;
@@ -24,6 +24,7 @@ public class Lexer{
     }
 
     switch (peek){
+      //singoli caratteri
       case '!':
         peek = ' ';
         return Token.not;
@@ -42,43 +43,9 @@ public class Lexer{
       case '*':
         peek = ' ';
         return Token.mult;
-      case '/':{
-        //come parte dell'esercizio 2.3 devo accettare i commenti delimitati da /* e */
-        //e quelli che iniziano con // e finiscono con \n o EOF
-        readch(br);
-        if (peek == '*') {
-          //inizia un commento che deve essere chiuso da */
-          readch(br);
-          char prec = peek; //quando leggo un /, se il carattere precedente era * devo chiudere il commento
-          while(!(prec == '*' && peek == '/')){
-            //tutti i caratteri letti qua dentro vengono ignorati dal lexer
-
-            //se raggiungo la fine del file prima che venga chiuso il commento -> errore
-            if (peek == ((char) -1)){
-              System.err.println("Unclosed comment at line " + line);
-              return null;
-            }
-            prec = peek;
-            readch(br);
-          }
-          //restituisco il prossimo token
-          peek = ' '; //qui imposto peek = ' ' perchè l'ultimo caratter letto è sempre / e voglio ignorarlo
-          return lexical_scan(br);
-        } else if(peek == '/'){
-          //inizia in commento che finiscono con \n o EOF
-          readch(br);
-          while(peek != '\n' && peek != ((char) -1)){
-            //tutti i caratteri letti qua dentro vengono ignorati dal lexer
-            readch(br);
-          }
-          //restituisco il prossimo token
-          //qui non mi serve mettere peek = ' ' perche l'ultimo carattere  letto è sempre '\n' (che verrebbe ignorato) o EOF(che voglio sempre analizzare)
-          return lexical_scan(br);
-        } else {
-          //non metto peek = ' ' perche ho gia letto ilprossimo carattere
-          return Token.div;
-        }
-      }
+      case '/':
+        peek = ' ';
+        return Token.div;
       case ';':
         peek = ' ';
         return Token.semicolon;
@@ -88,7 +55,7 @@ public class Lexer{
           peek = ' ';
           return Word.and;
         } else {
-          System.err.println("Erroneus character after & : " + peek + " at line " + line);
+          System.err.println("Erroneus character after & : " + peek);
             return null;
         }
       case '|':
@@ -97,7 +64,7 @@ public class Lexer{
           peek = ' ';
           return Word.or;
         } else {
-          System.err.println("Erroneus character after | : " + peek + " at line " + line);
+          System.err.println("Erroneus character after | : " + peek);
           return null;
         }
       case '<':
@@ -133,22 +100,14 @@ public class Lexer{
       case (char) -1:
         return new Token(Tag.EOF);
       default:{
-        if (Character.isLetter(peek) || peek == '_'){
-          //come parte dell'esercizio 2.2 devo accettare id corrispondenti a ([a-zA-z]|(_(_)*[a-zA-z0-9]))([a-zA-z0-9]|_)*
-          //leggo e concateno finche non trovo qualcosa diverso da [a-zA-z0-9_]
+        if (Character.isLetter(peek)){
+          //leggo e concateno finche non trovo qualcosa diverso da [a-zA-z0-9]
           String matchWord = new String(Character.toString(peek));
           readch(br);
-          while ((peek >= 'a' && peek <= 'z') || (peek >= 'A' && peek <= 'Z') || (peek >= '0' && peek <= '9') || (peek == '_')) {
+          while ((peek >= 'a' && peek <= 'z') || (peek >= 'A' && peek <= 'Z') || (peek >= '0' && peek <= '9')) {
             matchWord = matchWord.concat(Character.toString(peek));
             readch(br);
           }
-          //l'id non può essere composto solo da (_)*
-          //se togliendo tutti i _ dalla stringa diventa vuota, allora e fatta solo da _
-          if(matchWord.replace("_", "").length() == 0){
-            System.err.println("Invalid identifier: " + matchWord + " at line " + line);
-            return null;
-          }
-
           //controllo se ho letto una parola chiave
           //altrimenti ho letto un identificatore
           //Non assegno peek = ' ' perchè ho già letto il prossimo carattere
