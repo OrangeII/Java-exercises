@@ -1,4 +1,5 @@
 public class Ex1_6{
+	//thanks Ravindra sir
 	//https://www.youtube.com/watch?v=4yB7ECgZJmw&t=228s
 
 	public static boolean scan(String s){

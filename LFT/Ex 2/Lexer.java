@@ -18,8 +18,8 @@ public class Lexer{
   }
 
   public Token lexical_scan(BufferedReader br){
-    while(peek == ' ' || peek == '\t' || peek == '\n' || peek == '\r'){
-      if (peek == '\n') line++;
+    while(peek == ' ' || peek == '\t' || peek == '' || peek == '\r'){
+      if (peek == '') line++;
       readch(br);
     }
 
@@ -44,7 +44,7 @@ public class Lexer{
         return Token.mult;
       case '/':{
         //come parte dell'esercizio 2.3 devo accettare i commenti delimitati da /* e */
-        //e quelli che iniziano con // e finiscono con \n o EOF
+        //e quelli che iniziano con // e finiscono con  o EOF
         readch(br);
         if (peek == '*') {
           //inizia un commento che deve essere chiuso da */
@@ -65,14 +65,14 @@ public class Lexer{
           peek = ' '; //qui imposto peek = ' ' perchè l'ultimo caratter letto è sempre / e voglio ignorarlo
           return lexical_scan(br);
         } else if(peek == '/'){
-          //inizia in commento che finiscono con \n o EOF
+          //inizia in commento che finiscono con  o EOF
           readch(br);
-          while(peek != '\n' && peek != ((char) -1)){
+          while(peek != '' && peek != ((char) -1)){
             //tutti i caratteri letti qua dentro vengono ignorati dal lexer
             readch(br);
           }
           //restituisco il prossimo token
-          //qui non mi serve mettere peek = ' ' perche l'ultimo carattere  letto è sempre '\n' (che verrebbe ignorato) o EOF(che voglio sempre analizzare)
+          //qui non mi serve mettere peek = ' ' perche l'ultimo carattere  letto è sempre '' (che verrebbe ignorato) o EOF(che voglio sempre analizzare)
           return lexical_scan(br);
         } else {
           //non metto peek = ' ' perche ho gia letto ilprossimo carattere
@@ -221,5 +221,4 @@ public class Lexer{
       } while (tok.tag != Tag.EOF);
     } catch (IOException e) {e.printStackTrace();}
   }
-
 }
