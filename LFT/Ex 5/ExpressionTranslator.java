@@ -125,6 +125,8 @@ public class ExpressionTranslator {
       expr();
       match((int) ')');
     } else if (look.tag == Tag.NUM) {
+      //lo devo fare prima perchè quando chiamo match l'input avanza
+      //in alternativa posso memorizzarlo in una variablie
       code.emit(OpCode.ldc,((NumberTok) look).lexeme);
       match(Tag.NUM);
     } else {
