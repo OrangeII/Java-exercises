@@ -10,7 +10,7 @@ public class Translator{
   private Lexer lex;
   private BufferedReader pbr;
   private Token look;
-
+  private Token precedente;
   SymbolTable st = new SymbolTable();
   CodeGenerator code = new CodeGenerator();
   int count=0;
@@ -22,6 +22,7 @@ public class Translator{
   }
 
   void move(){
+    precedente = look;
     look = lex.lexical_scan(pbr);
     System.out.println("token = " + look);
   }
@@ -37,7 +38,7 @@ public class Translator{
   void match(int t){
     if (look.tag == t){
       if (look.tag != Tag.EOF) move();
-    } else error("syntax error: " + look + " " + t + " Expected ");
+    } else error("syntax error: Expected " + t + " but found " + look + " after " + precedente );
   }
 
   //funzioni di produzione per i nonterminali della grammatica
@@ -60,7 +61,7 @@ public class Translator{
         e.printStackTrace();
       }
     } else {
-        error("Unexpected symbol: " + look);
+        error("(progr) Unexpected symbol: " + look + " after " + precedente);
     }
   }
   private void statlist(int sl_next){
@@ -77,7 +78,7 @@ public class Translator{
       int slp_next = sl_next;
       statlistp(slp_next);
     } else {
-        error("Unexpected symbol: " + look);
+        error("(statilist) Unexpected symbol: " + look + " after " + precedente);
     }
   }
   private void statlistp(int slp_next){
@@ -93,7 +94,7 @@ public class Translator{
     } else if (look.tag == Tag.EOF){
       //epsilon
     } else {
-      error("Unexpected symbol: " + look);
+      error("(statlistp) Unexpected symbol: " + look + " after " + precedente);
     }
   }
 
@@ -119,7 +120,7 @@ public class Translator{
         code.emit(OpCode.invokestatic, 0);
         code.emit(OpCode.istore, read_id_addr);
       } else {
-        error("Error in grammar (stat) after read( with " + look);
+        error("Error in grammar (stat) after reading( with " + look);
       }
     } else if (look.tag == Tag.IF) {
       match(Tag.IF);
@@ -193,7 +194,7 @@ public class Translator{
       statlist(sl_next);
       match(Tag.END);
     } else {
-      error("Unexpected symbol: " + look);
+      error("(stat) Unexpected symbol: " + look+ " after " + precedente);
     }
   }
 
@@ -230,7 +231,7 @@ public class Translator{
       code.emit(istruzione, b_true);
       code.emit(OpCode.GOto, b_false);
     } else {
-      error("Unexpected symbol: " + look);
+      error("(bexpr) Unexpected symbol: " + look + " after " + precedente);
     }
   }
 
@@ -239,7 +240,7 @@ public class Translator{
       term();
       exprp();
     } else {
-      error("Unexpected symbol: " + look);
+      error("(expr) Unexpected symbol: " + look + " after " + precedente);
     }
   }
 
@@ -278,7 +279,7 @@ public class Translator{
           }
       //epsilon
     } else {
-      error("Unexpected symbol: " + look);
+      error("(exprp) Unexpected symbol: " + look + " after " + precedente);
     }
   }
 
@@ -287,7 +288,7 @@ public class Translator{
       fact();
       termp();
     } else {
-      error("Unexpected symbol: " + look);
+      error("(term) Unexpected symbol: " + look + " after " + precedente);
     }
   }
 
@@ -325,7 +326,7 @@ public class Translator{
         look.tag == (char) ')') {
       //epsilon
     } else {
-      error("Unexpected symbol: " + look);
+      error("(termp) Unexpected symbol: " + look +  " after " + precedente);
     }
   }
 
@@ -347,7 +348,7 @@ public class Translator{
       match(Tag.ID);
       code.emit(OpCode.iload, id_addr);
     } else {
-      error("Unexpected symbol: " + look);
+      error("(fact) Unexpected symbol: " + look + " after " + precedente);
     }
   }
 

@@ -1,5 +1,5 @@
-for(a = 0; a < 10) do
-begin
+for (a = 0; a < 10) do
+begin 
 	print(a);
 	if a == 5 then
 		print(420)

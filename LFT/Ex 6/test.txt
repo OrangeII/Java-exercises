@@ -1,0 +1,11 @@
+if a <> 1 then
+	begin
+		print(a);
+		a = a +1
+	end
+else
+	if a >= 2 then
+		read(a)
+	else
+		read(b);
+		b  = 90
