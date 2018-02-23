@@ -1,11 +1,14 @@
-for (a = 0; a < 10) do
-begin 
-	print(a);
-	if a == 5 then
-		print(420)
+read(_nome);
+read(x_1);
+z = 40;
+if _nome > x_1 then
+	print(_nome * x_1)
+else
+		print(_nome * x_1)
+;
+
+for (i = 0; i <5) do
+	if i <= 2 then
+		print(i)
 	else
-		if a > 5 then
-			print(360)
-		else
-			print(720)
-end
+		print(42)

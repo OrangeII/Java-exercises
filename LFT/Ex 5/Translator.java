@@ -179,15 +179,18 @@ public class Translator{
       code.emitLabel(b_true);
       match(')');
       match(Tag.DO);
-      int s1_next = begin;
+      int incremento = code.newLabel();
+      int s1_next = incremento;
       stat(s1_next);
+      code.emit(OpCode.GOto, s1_next);
       //istruzioni per incrementare il contatore
+      code.emitLabel(incremento);
       code.emit(OpCode.iload, id_addr);
       code.emit(OpCode.ldc, 1);
       code.emit(OpCode.iadd);
       code.emit(OpCode.istore, id_addr);
       //fine incremento contatore
-      code.emit(OpCode.GOto, s1_next);
+      code.emit(OpCode.GOto, begin);
     } else if (look.tag == Tag.BEGIN) {
       match(Tag.BEGIN);
       int sl_next = s_next;
