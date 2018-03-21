@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 public class Parser{
 
-  //parser come soluzione all esercizio 3.1
+  //parser come soluzione all esercizio 6
   //per compilare rinominare in Parser.java
 
   private Lexer lex;
